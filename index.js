@@ -66,17 +66,21 @@ function populateBets (id) {
     .then(data => {
 
         let newUl = document.createElement('ul')
-        
+        debugger
         data.forEach((element) => {
+        fetch(`http://localhost:3000/users/${element.userId}`)
+        .then(res => res.json())
+        .then(user => {
+            debugger
         let newLi = document.createElement('li')
-        newLi.textContent =`${name} bets that: ${element.prediction}`
+        newLi.textContent =`${user.name} bets that: ${element.prediction}`
         newUl.append(newLi)
         })
         let betsCell = document.querySelector(`#R${id} .bets`)
         betsCell.append(newUl)
     }
         )
-
+    })
 }
 
 function getUsers() {
