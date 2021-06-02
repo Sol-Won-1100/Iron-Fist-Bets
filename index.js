@@ -20,13 +20,118 @@ function getInitialEvents() {
     let body = document.querySelector('#currentEventsBody')
     body.innerHTML = ''
     
-    fetch('http://localhost:3000/events')
+    fetch('http://localhost:3000/events?determined=false')
     .then(res => res.json())
     .then(events => events.forEach(populateEvent))
 }
 
 function populateEvent(eventObj) {
     let body = document.querySelector('#currentEventsBody')
+    let row = document.createElement('tr') //make a row
+    let eventTitle = document.createElement('td')//make a event title data cell
+    let bets = document.createElement('td')//make a event title data cell
+    let wager = document.createElement('td')//make a event title data cell
+    let outcome = document.createElement('td')//make a event title data cell
+    
+    let timestamp = document.createElement('td')//make a event title data cell
+    
+    row.id = `R${eventObj.id}`
+
+    eventTitle.textContent = eventObj.betTitle
+    eventTitle.className = 'table'
+
+    populateBets(eventObj.id)
+    bets.classList.add('table', 'bets')
+
+    wager.textContent = eventObj.wager
+    wager.className = 'table'
+
+    outcome.textContent = 'Who won?'
+    outcome.classList.add('table', 'outcome')
+    addNamesToButts(eventObj.id)
+
+    timestamp.textContent = eventObj.timestamp
+    timestamp.className = 'table'
+
+
+    row.append(eventTitle, bets, wager, outcome, timestamp)
+    body.append(row)
+}
+
+function getDeterminedEvents() {
+    let body = document.querySelector('#determinedEventsBody')
+    body.innerHTML = ''
+    
+    fetch('http://localhost:3000/events?determined=true')
+    .then(res => res.json())
+    .then(events => events.forEach(populateDeterminedEvent))
+}
+
+function populateDeterminedEvent(eventObj) {
+    let body = document.querySelector('#determinedEventsBody')
+    let row = document.createElement('tr') //make a row
+    let eventTitle = document.createElement('td')//make a event title data cell
+    let bets = document.createElement('td')//make a event title data cell
+    let wager = document.createElement('td')//make a event title data cell
+    let outcome = document.createElement('td')//make a event title data cell
+    let paid = document.createElement('td')//make a event title data cell
+    let paidButt = document.createElement('button')
+    let timestamp = document.createElement('td')//make a event title data cell
+    
+    row.id = `R${eventObj.id}`
+
+    eventTitle.textContent = eventObj.betTitle
+    eventTitle.className = 'table'
+
+    populateBets(eventObj.id)
+    bets.classList.add('table', 'bets')
+
+    wager.textContent = eventObj.wager
+    wager.className = 'table'
+
+    outcome.textContent = `${eventObj.victor} won the bet!`
+    outcome.classList.add('table', 'outcome')
+
+    paid.className = 'table'
+    paidButt.textContent = 'Loser Paid'
+    paidButt.addEventListener('click', (e) => loserPaid(e, eventObj.id))
+    paid.append(paidButt)
+
+
+    timestamp.textContent = eventObj.timestamp
+    timestamp.className = 'table'
+
+
+    row.append(eventTitle, bets, wager, outcome, paid, timestamp)
+    body.append(row)
+}
+
+function loserPaid(e, id) {
+    fetch(`http://localhost:3000/events/${id}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            settled: true,
+            determined: 'complete'
+        })
+    })
+    .then(res => res.json())
+    .then(refresh())
+}
+
+function getSettledEvents() {
+    let body = document.querySelector('#settledEventsBody')
+    body.innerHTML = ''
+    
+    fetch('http://localhost:3000/events?settled=true')
+    .then(res => res.json())
+    .then(events => events.forEach(populateSettledEvent))
+}
+
+function populateSettledEvent(eventObj) {
+    let body = document.querySelector('#settledEventsBody')
     let row = document.createElement('tr') //make a row
     let eventTitle = document.createElement('td')//make a event title data cell
     let bets = document.createElement('td')//make a event title data cell
@@ -46,18 +151,56 @@ function populateEvent(eventObj) {
     wager.textContent = eventObj.wager
     wager.className = 'table'
 
-    outcome.textContent = 'Coming Soon'
-    outcome.className = 'table'
+    outcome.textContent = `${eventObj.victor} won the bet!`
+    outcome.classList.add('table', 'outcome')
 
-    paid.textContent = eventObj.settled
     paid.className = 'table'
+    paid.textContent = 'Loser Paid'
 
     timestamp.textContent = eventObj.timestamp
     timestamp.className = 'table'
 
-
     row.append(eventTitle, bets, wager, outcome, paid, timestamp)
     body.append(row)
+}
+
+function addNamesToButts(id) {
+    fetch(`http://localhost:3000/bets?eventId=${id}`)
+    .then(res => res.json())
+    .then(betsArray => {
+
+        let outCell = document.querySelector(`#R${id} .outcome`)
+        
+        betsArray.forEach((bet) => {
+        fetch(`http://localhost:3000/users/${bet.userId}`)
+        .then(res => res.json())
+        .then(user => {
+            let outButt = document.createElement('button')
+            outButt.textContent =`${user.name} wins!`
+            outButt.value = user.name
+            outButt.addEventListener('click', (e) => chooseVictor(e, id))
+            outCell.append(outButt)
+        })
+
+    }
+        )
+    })
+}
+
+function chooseVictor(e, id) {
+    
+    fetch(`http://localhost:3000/events/${id}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            victor: e.target.value,
+            determined: true
+        })
+    })
+    .then(res => res.json())
+    .then(refresh()) // WE SHOULD REFRESH PAGE HERE AFTER WE BUILD OUT OTHER TABLES
 }
 
 function populateBets (id) {
@@ -66,12 +209,12 @@ function populateBets (id) {
     .then(data => {
 
         let newUl = document.createElement('ul')
-        debugger
+        
         data.forEach((element) => {
         fetch(`http://localhost:3000/users/${element.userId}`)
         .then(res => res.json())
         .then(user => {
-            debugger
+        
         let newLi = document.createElement('li')
         newLi.textContent =`${user.name} bets that: ${element.prediction}`
         newUl.append(newLi)
@@ -119,6 +262,9 @@ function newEventPost(e){
         determined: false,
         settled: false
     }
+    e.target.newEvent.value = ''
+    e.target.wager.value = ''
+
     fetch(`http://localhost:3000/events`, {
         method: 'POST',
         headers: {
@@ -142,6 +288,9 @@ function postBets(eventObj, e) {
         eventId: eventObj.id,
         userId: e.target.userSelection2.value
     }
+
+    e.target.newBet1.value = ''
+    e.target.newBet2.value = ''
 
     let promise1 = fetch(`http://localhost:3000/bets`, {
         method: 'POST',
@@ -167,6 +316,11 @@ function postBets(eventObj, e) {
     .then(getInitialEvents())
 }
 
+function refresh() {
+    getDeterminedEvents()
+    getInitialEvents()
+    getSettledEvents()
+}
 
 function init() {
     const userInputForm = document.querySelector('#addUser')
@@ -176,6 +330,8 @@ function init() {
 
     getInitialEvents()
     getUsers()
+    getDeterminedEvents()
+    getSettledEvents()
 }
 
 init()
