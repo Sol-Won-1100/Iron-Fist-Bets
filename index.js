@@ -4,6 +4,7 @@ userInputForm.addEventListener('submit', addUser)
 
 function addUser(e) {
     e.preventDefault()
+    if(e.target.newUser.value != '') {
     fetch('http://localhost:3000/users', {
         method: 'POST',
         headers: {
@@ -12,7 +13,10 @@ function addUser(e) {
         body: JSON.stringify({
             name: e.target.newUser.value
         })
-    }).then(res => res.json()).then(console.log)
+    }).then(res => res.json()).then(getUsers())
+} else {
+    console.log('You need a user name dummy')
+}
 }
 
 function getInitialEvents() {
@@ -71,11 +75,35 @@ function populateBets (id) {
         })
         let betsCell = document.querySelector(`#R${id} .bets`)
         betsCell.append(newUl)
-        console.log(newUl)
-        console.log(betsCell)
     }
         )
 
+}
+
+function getUsers() {
+    fetch('http://localhost:3000/users')
+    .then(res => res.json())
+    .then(populateUserDropdown)
+}
+
+function populateUserDropdown(userObjArray) {
+    let user1 = document.querySelector('#userSelection1')
+    let user2 = document.querySelector('#userSelection2')
+    user1.innerHTML = ''
+    user2.innerHTML = ''
+    console.log(user1)
+    console.log(user2)
+
+    userObjArray.forEach(user => {
+        let option1 = document.createElement('option')
+        let option2 = document.createElement('option')
+
+        option1.textContent = user.name
+        option2.textContent = user.name
+
+        user1.append(option1)
+        user2.append(option2)
+    })
 }
 
 function init() {
@@ -83,6 +111,7 @@ function init() {
     userInputForm.addEventListener('submit', addUser)
     
     getInitialEvents()
+    getUsers()
 }
 
 init()
