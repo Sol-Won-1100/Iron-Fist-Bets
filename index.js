@@ -17,6 +17,9 @@ function addUser(e) {
 }
 
 function getInitialEvents() {
+    let body = document.querySelector('#currentEventsBody')
+    body.innerHTML = ''
+    
     fetch('http://localhost:3000/events')
     .then(res => res.json())
     .then(events => events.forEach(populateEvent))
@@ -39,7 +42,6 @@ function populateEvent(eventObj) {
 
     populateBets(eventObj.id)
     bets.classList.add('table', 'bets')
-
 
     wager.textContent = eventObj.wager
     wager.className = 'table'
@@ -67,7 +69,7 @@ function populateBets (id) {
         
         data.forEach((element) => {
         let newLi = document.createElement('li')
-        newLi.textContent = element.prediction
+        newLi.textContent =`${name} bets that: ${element.prediction}`
         newUl.append(newLi)
         })
         let betsCell = document.querySelector(`#R${id} .bets`)
@@ -121,35 +123,53 @@ function newEventPost(e){
         body: JSON.stringify(newEventObj)
     }).then(res => res.json())
     .then(data => postBets(data, e))
-
 }
 
-// // function postBets(eventObj, e) {
-// //     console.log(eventObj)
-// //     console.log(e)
+function postBets(eventObj, e) {
     
-// //     let betObj1 = {
-// //         prediction: e.target.newBet1.value,
-// //         eventId: eventObj.id,
-// //         userId: e.target[""]
-// //     }
+    let betObj1 = {
+         prediction: e.target.newBet1.value,
+         eventId: eventObj.id,
+         userId: e.target.userSelection1.value
+    }
 
-// //     fetch(``)
-// }
-const userSelectionId1 = document.querySelector('#userSelection1')
-userSelectionId1.addEventListener('change', updateUserFormId1)
+    let betObj2 = {
+        prediction: e.target.newBet2.value,
+        eventId: eventObj.id,
+        userId: e.target.userSelection2.value
+    }
 
-function updateUserFormId1 (e) {
-    console.log(e.target.value)
+    let promise1 = fetch(`http://localhost:3000/bets`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(betObj1)
+    })
+    .then(res => res.json())
+    .then()
+
+    let promise2 = fetch(`http://localhost:3000/bets`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(betObj2)
+    })
+    .then(res => res.json())
+    .then()
+
+    Promise.all([promise1, promise2])
+    .then(getInitialEvents())
 }
+
 
 function init() {
     const userInputForm = document.querySelector('#addUser')
     userInputForm.addEventListener('submit', addUser)
     const newEventForm = document.querySelector('#testForm')
     newEventForm.addEventListener('submit', newEventPost)
-    let currentUserId1
-    let currentUserId2
+
     getInitialEvents()
     getUsers()
 }
