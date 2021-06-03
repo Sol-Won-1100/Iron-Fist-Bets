@@ -63,7 +63,12 @@ function populateEvent(eventObj) {
     body.append(row)
 
      let collapsibleTable = document.querySelector('#active')
-     collapsibleTable.style.maxHeight = 'max-content'
+     let activeBtn = document.querySelector('#activeBtn')
+     if (!activeBtn.classList.contains('active')) {
+        collapsibleTable.style.maxHeight = 'max-content'
+     }
+
+     
     
 }
 
@@ -110,9 +115,16 @@ function populateDeterminedEvent(eventObj) {
     timestamp.textContent = eventObj.timestamp
     timestamp.className = 'table'
 
-
     row.append(eventTitle, bets, wager, outcome, paid, timestamp)
     body.append(row)
+    
+
+    let collapsibleTable = document.querySelector('#determined')
+    let determinedBtn = document.querySelector('#determinedBtn')
+    if (!determinedBtn.classList.contains('active')) {
+       collapsibleTable.style.maxHeight = 'max-content'
+    }
+    
 }
 
 function loserPaid(e, id) {
@@ -174,6 +186,13 @@ function populateSettledEvent(eventObj) {
 
     row.append(eventTitle, bets, wager, outcome, paid, timestamp)
     body.append(row)
+
+    
+    let collapsibleTable = document.querySelector('#settled')
+    let settledBtn = document.querySelector('#settledBtn')
+    if (!settledBtn.classList.contains('active')) {
+       collapsibleTable.style.maxHeight = 'max-content'
+    }
 }
 
 function addNamesToButts(id) {
@@ -290,7 +309,9 @@ function newEventPost(e){
         },
         body: JSON.stringify(newEventObj)
     }).then(res => res.json())
-    .then(data => postBets(data, e))
+    .then(data => {
+        postBets(data, e)
+    })
 } else {
     console.log('Fields cannot be empty')
 }
@@ -363,6 +384,16 @@ function createCollapsibles() {
     }
 }
 
+function loadPageWithClosedTables ()
+{
+    let settledBtn = document.querySelector('#settledBtn')
+    let determinedBtn = document.querySelector('#determinedBtn')
+    let activeBtn = document.querySelector('#activeBtn')
+    settledBtn.classList.add('active')
+    determinedBtn.classList.add('active')
+    activeBtn.classList.add('active')
+}
+
 function init() {
     const userInputForm = document.querySelector('#addUser')
     userInputForm.addEventListener('submit', addUser)
@@ -375,6 +406,7 @@ function init() {
     getUsers()
     getDeterminedEvents()
     getSettledEvents()
+    loadPageWithClosedTables()
 }
 
 init()
