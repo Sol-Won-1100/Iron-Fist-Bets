@@ -61,6 +61,10 @@ function populateEvent(eventObj) {
 
     row.append(eventTitle, bets, wager, outcome, timestamp)
     body.append(row)
+
+     let collapsibleTable = document.querySelector('#active')
+     collapsibleTable.style.maxHeight = 'max-content'
+    
 }
 
 function getDeterminedEvents() {
@@ -353,10 +357,11 @@ function createCollapsibles() {
             } else {
                 content.style.maxHeight = content.scrollHeight + 'px';
             }
+            console.log(content)
+            console.log(content.style.maxHeight)
         });
     }
 }
-
 
 function init() {
     const userInputForm = document.querySelector('#addUser')
