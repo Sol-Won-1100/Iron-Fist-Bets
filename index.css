@@ -47,7 +47,7 @@ body {
   }
 
   #userContainer {
-    width: 300px;
+    width: 350px;
     margin: 20px auto 20px auto;
     text-align: center;
     border: 2px solid black;
@@ -80,4 +80,14 @@ body {
   .collapsible {
     padding: 10px;
     margin: 20px auto 20px auto;
+  }
+
+  textarea {
+    font-family: Arial;
+    width: 230px;
+    height: 18px;
+  }
+
+  .betsDiv select, .betsDiv label {
+    vertical-align: top;
   }
