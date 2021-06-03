@@ -107,7 +107,8 @@ function populateDeterminedEvent(eventObj) {
     outcome.classList.add('table', 'outcome')
 
     paid.className = 'table'
-    paidButt.textContent = 'Loser Paid'
+    paidButt.textContent = 'Yes, Settle This Bet'
+    paidButt.classList.add('button')
     paidButt.addEventListener('click', (e) => loserPaid(e, eventObj.id))
     paid.append(paidButt)
 
@@ -179,7 +180,7 @@ function populateSettledEvent(eventObj) {
     outcome.classList.add('table', 'outcome')
 
     paid.className = 'table'
-    paid.textContent = 'Loser Paid'
+    paid.textContent = 'Yes, the Loser Paid'
 
     timestamp.textContent = eventObj.timestamp
     timestamp.className = 'table'
@@ -394,6 +395,36 @@ function loadPageWithClosedTables ()
     activeBtn.classList.add('active')
 }
 
+function hideShowButtons() {
+    let activeBtn = document.querySelector('#activeBtn')
+    let settledBtn = document.querySelector('#settledBtn')
+    let determinedBtn = document.querySelector('#determinedBtn')
+
+    activeBtn.addEventListener('click', (e) => {
+        if(e.target.classList.contains('active')) {
+            e.target.textContent = 'Show Active Bets'
+        } else {
+            e.target.textContent = 'Hide Active Bets'
+        }
+    })
+
+    determinedBtn.addEventListener('click', (e) => {
+        if(e.target.classList.contains('active')) {
+            e.target.textContent = 'Show Determined Outcomes'
+        } else {
+            e.target.textContent = 'Hide Determined Outcomes'
+        }
+    })
+
+    settledBtn.addEventListener('click', (e) => {
+        if(e.target.classList.contains('active')) {
+            e.target.textContent = 'Show Settled Bets'
+        } else {
+            e.target.textContent = 'Hide Settled Bets'
+        }
+    })
+}
+
 function init() {
     const userInputForm = document.querySelector('#addUser')
     userInputForm.addEventListener('submit', addUser)
@@ -407,6 +438,7 @@ function init() {
     getDeterminedEvents()
     getSettledEvents()
     loadPageWithClosedTables()
+    hideShowButtons()
 }
 
 init()

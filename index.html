@@ -10,49 +10,52 @@
 </head>
 <body>
     <h1>Iron Fist Bets</h1>
-
+    <h3>A Place for Friends to Keep Track of Their Bets</h3>
+    <div id='userContainer'>
     <form id="addUser">
-        <label>Add User</label>
-        <br>
-        <br>
+        <h4>Add User</h4>
         <label>Name:</label>
         <input id='newUser' type="text">
-        <input type="submit" value="Submit">
+        <input type="submit" value="Submit" class='button'>
         <br>
         <br>
         </form>
+    </div>
+    <h2>. . .</h2>
+        <div id='eventContainer'>
             <form id='testForm'>
-                <label>New Event</label>
+                <h4>Add a New Bet</h4>
                 <br>
-                <label>Event Title</label>
+                <label>What Event Are You Betting On?</label>
                 <input id="newEvent" type="text">
                 <br>
-                <label>User 1</label>
+                <br>
                 <select id="userSelection1">
                 </select>
-                <label> Bets </label>
+                <label> bets that </label>
                 <input id="newBet1" type="text">
                 <br>
                 <br>
-                <label>User 2</label>
                 <select id='userSelection2'>
                 </select>
-                <label> Bets </label>
+                <label> bets that </label>
                 <input id="newBet2" type="text">
                 <br>
-                <label>Wager</label>
+                <br>
+                <label>What Are You Wagering?</label>
                 <input id="wager" type="text">
                 <br>
-                <input type='submit' value="submit">
+                <br>
+                <input type='submit' value="Lock This Bet In" class='button'>
         </form>
-
-        <br>
-        <button class='collapsible' id='activeBtn'>Active Bets</button>
+        </div>
+        <h2>. . .</h2>
+        <button class='collapsible button' id='activeBtn'>Show Active Bets</button>
         <div class='collapseContent' id='active'>
         <table class='table'>
             <thead>
                 <tr>
-                    <th>Active Bets</th>
+                    <th>Event</th>
                     <th>Bets</th>
                     <th>Wager</th>
                     <th>Who Won?</th>
@@ -71,16 +74,16 @@
             </tbody>
         </table>
         </div>
-        <button class='collapsible' id='determinedBtn'>Determined Outcomes</button>
+        <button class='collapsible button' id='determinedBtn'>Show Determined Outcomes</button>
         <div class='collapseContent' id='determined'>
         <table class='table'>
             <thead>
                 <tr>
-                    <th>Determined Outcomes</th>
+                    <th>Event</th>
                     <th>Bets</th>
                     <th>Wager</th>
                     <th>Outcome</th>
-                    <th>Paid?</th>
+                    <th>Is This Settled?</th>
                     <th>Date</th>
                 </tr>
             </thead>
@@ -88,16 +91,16 @@
             </tbody>
         </table>
         </div>
-        <button class='collapsible' id='settledBtn'>Settled Events</button>
+        <button class='collapsible button' id='settledBtn'>Show Settled Bets</button>
         <div class='collapseContent' id='settled'>
         <table class='table'>
             <thead>
                 <tr>
-                    <th>Bet History</th>
+                    <th>Event</th>
                     <th>Bets</th>
                     <th>Wager</th>
                     <th>Outcome</th>
-                    <th>Paid?</th>
+                    <th>Is This Settled?</th>
                     <th>Date</th>
                 </tr>
             </thead>
