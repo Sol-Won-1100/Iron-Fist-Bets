@@ -10,7 +10,12 @@ function addUser(e) {
         body: JSON.stringify({
             name: e.target.newUser.value
         })
-    }).then(res => res.json()).then(getUsers())
+    })
+    .then(res => res.json())
+    .then(() => {
+        e.target.newUser.value = ''
+        getUsers()
+    })
 } else {
     console.log('You need a user name dummy')
 }
@@ -118,7 +123,10 @@ function loserPaid(e, id) {
         })
     })
     .then(res => res.json())
-    .then(refresh())
+    .then(() => {
+        getDeterminedEvents()
+        getSettledEvents()
+    })
 }
 
 function getSettledEvents() {
@@ -200,7 +208,10 @@ function chooseVictor(e, id) {
         })
     })
     .then(res => res.json())
-    .then(refresh()) // WE SHOULD REFRESH PAGE HERE AFTER WE BUILD OUT OTHER TABLES
+    .then(() => {
+        getInitialEvents()
+        getDeterminedEvents()
+    })
 }
 
 function populateBets (id) {
@@ -255,6 +266,7 @@ function populateUserDropdown(userObjArray) {
 
 function newEventPost(e){
     e.preventDefault()
+    if(e.target.newEvent.value != '' && e.target.wager.value != '' && e.target.newBet1.value != '' && e.target.newBet2.value != ''){
     let newEventObj = {
         betTitle: e.target.newEvent.value,
         wager: e.target.wager.value,
@@ -273,6 +285,9 @@ function newEventPost(e){
         body: JSON.stringify(newEventObj)
     }).then(res => res.json())
     .then(data => postBets(data, e))
+} else {
+    console.log('Fields cannot be empty')
+}
 }
 
 function postBets(eventObj, e) {
@@ -316,17 +331,38 @@ function postBets(eventObj, e) {
     .then(getInitialEvents())
 }
 
-function refresh() {
-    getDeterminedEvents()
-    getInitialEvents()
-    getSettledEvents()
+// function refresh() {
+//     getDeterminedEvents()
+//     getInitialEvents()
+//     getSettledEvents()
+// }
+
+function createCollapsibles() {
+    
+    const collapsible = document.getElementsByClassName('collapsible');
+
+    for(let i = 0; i < collapsible.length; i++) {
+        collapsible[i].addEventListener('click', function() {
+            console.log('clicked!')
+            this.classList.toggle('active');
+            const content = this.nextElementSibling;
+            if(content.style.maxHeight) {
+               content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+            }
+        });
+    }
 }
+
 
 function init() {
     const userInputForm = document.querySelector('#addUser')
     userInputForm.addEventListener('submit', addUser)
     const newEventForm = document.querySelector('#testForm')
     newEventForm.addEventListener('submit', newEventPost)
+
+    createCollapsibles()
 
     getInitialEvents()
     getUsers()
