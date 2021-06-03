@@ -3,3 +3,38 @@
     overflow: hidden;
     transition: max-height 0.3s ease-out;
   }
+
+  table, th, td {
+    border: 1px solid black;
+  }
+
+  table {
+    width: 100%
+  }
+  td {
+    text-align: center;
+  }
+  li {
+    padding: 5px;
+    list-style-type: none;
+  }
+  /* .flexButts{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  } */
+  .flexButtItem {
+    display: flex;
+    flex-direction: column;
+    margin: 10px auto
+  }
+  .button {
+    color: #fff;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+  }
+  .button:hover {
+    color: #fff;
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+  }

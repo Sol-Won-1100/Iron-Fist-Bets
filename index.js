@@ -51,8 +51,8 @@ function populateEvent(eventObj) {
     wager.textContent = eventObj.wager
     wager.className = 'table'
 
-    outcome.textContent = 'Who won?'
-    outcome.classList.add('table', 'outcome')
+    // outcome.textContent = 'Who won?'
+    outcome.classList.add('table', 'outcome', 'flexButts')
     addNamesToButts(eventObj.id)
 
     timestamp.textContent = eventObj.timestamp
@@ -184,6 +184,7 @@ function addNamesToButts(id) {
         .then(res => res.json())
         .then(user => {
             let outButt = document.createElement('button')
+            outButt.classList.add('flexButtItem', 'button')
             outButt.textContent =`${user.name} wins!`
             outButt.value = user.name
             outButt.addEventListener('click', (e) => chooseVictor(e, id))
@@ -267,10 +268,11 @@ function populateUserDropdown(userObjArray) {
 function newEventPost(e){
     e.preventDefault()
     if(e.target.newEvent.value != '' && e.target.wager.value != '' && e.target.newBet1.value != '' && e.target.newBet2.value != ''){
-    let newEventObj = {
+        let newDate = new Date()
+        let newEventObj = {
         betTitle: e.target.newEvent.value,
         wager: e.target.wager.value,
-        timestamp: Date(),
+        timestamp: newDate.toDateString(),
         determined: false,
         settled: false
     }
