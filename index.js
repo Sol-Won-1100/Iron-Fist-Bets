@@ -271,21 +271,26 @@ function getUsers() {
 function populateUserDropdown(userObjArray) {
     let user1 = document.querySelector('#userSelection1')
     let user2 = document.querySelector('#userSelection2')
+    let userListElement = document.querySelector('#userList')
     user1.innerHTML = ''
     user2.innerHTML = ''
+    userListElement.innerHTML = ''
 
 
     userObjArray.forEach(user => {
         let option1 = document.createElement('option')
         let option2 = document.createElement('option')
+        let userListItem = document.createElement('li')
 
         option1.textContent = user.name
         option1.value = `${user.id}`
         option2.textContent = user.name
         option2.value = `${user.id}`
+        userListItem.textContent = user.name
 
         user1.append(option1)
         user2.append(option2)
+        userListElement.append(userListItem)
     })
 }
 

@@ -11,6 +11,7 @@
 <body>
     <h1>Iron Fist Bets</h1>
     <h3>A Place for Friends to Keep Track of Their Bets</h3>
+<div class='totalBox'>
     <div id='userContainer'>
     <form id="addUser">
         <h4>Add User</h4>
@@ -21,8 +22,17 @@
         <br>
         </form>
     </div>
-    <h2>. . .</h2>
+    
+    <div class='userListContainer' >
+        <h4>User List</h4>
+        <ul id='userList'>
+        </ul>
+    </div>
+
+    
+    
         <div id='eventContainer'>
+            <!-- <h2>. . .</h2> -->
             <form id='testForm'>
                 <h4>Add a New Bet</h4>
                 <br>
@@ -53,6 +63,7 @@
                 <input type='submit' value="Lock This Bet In" class='button'>
         </form>
         </div>
+    </div>
         <h2>. . .</h2>
         <button class='collapsible button' id='activeBtn'>Show Active Bets</button>
         <div class='collapseContent' id='active'>
